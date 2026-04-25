@@ -59,6 +59,23 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(bottomNavigationView, navController);
         }
+        // --- CÓDIGO PARA INTERCEPTAR EL BOTÓN SALIR ---
+
+        // Interceptamos el menú lateral
+        if (navigationView != null) {
+            navigationView.getMenu().findItem(R.id.nav_salir).setOnMenuItemClickListener(item -> {
+                mostrarDialogoSalir();
+                return true; // Devuelve true indicando que ya manejamos este clic
+            });
+        }
+
+        // Interceptamos el menú inferior 
+        if (bottomNavigationView != null) {
+            bottomNavigationView.getMenu().findItem(R.id.nav_salir).setOnMenuItemClickListener(item -> {
+                mostrarDialogoSalir();
+                return true;
+            });
+        }
     }
 
     @Override
@@ -89,5 +106,19 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    // Método para mostrar el cuadro de diálogo de confirmación
+    private void mostrarDialogoSalir() {
+        new android.app.AlertDialog.Builder(this)
+                .setTitle("Cerrar aplicación")
+                .setMessage("¿Desea salir de la aplicación?")
+                .setPositiveButton("Sí", (dialog, which) -> {
+                    finishAffinity(); // Cierra todas las ventanas y termina la app
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss(); // Cierra el cuadro de diálogo y no hace nada
+                })
+                .show();
     }
 }
