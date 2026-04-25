@@ -1,38 +1,62 @@
 package com.eskere.tpo4.ui.cargar;
 
-import androidx.lifecycle.ViewModelProvider;
-
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.eskere.tpo4.R;
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
+
+import com.eskere.tpo4.databinding.FragmentCargarBinding;
 
 public class CargarFragment extends Fragment {
 
-    private CargarViewModel mViewModel;
+    private FragmentCargarBinding binding;
+    private CargarViewModel viewModel;
 
-    public static CargarFragment newInstance() {
-        return new CargarFragment();
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
+
+        // Inicializamos el ViewModel y el ViewBinding
+        viewModel = new ViewModelProvider(this).get(CargarViewModel.class);
+        binding = FragmentCargarBinding.inflate(inflater, container, false);
+        View root = binding.getRoot();
+
+        // OBSERVADOR 1: Escucha los mensajes y los muestra en un Toast
+        viewModel.getMensajeToast().observe(getViewLifecycleOwner(), mensaje -> {
+            if (mensaje != null) {
+                Toast.makeText(getContext(), mensaje, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // OBSERVADOR 2: Escucha si debe vaciar los EditText tras una carga exitosa
+        viewModel.getLimpiarCampos().observe(getViewLifecycleOwner(), limpiar -> {
+            if (limpiar != null && limpiar) {
+                binding.etCodigo.setText("");
+                binding.etDescripcion.setText("");
+                binding.etPrecio.setText("");
+            }
+        });
+
+        // BOTÓN: Captura cruda de los datos y delegación absoluta al ViewModel
+        binding.btnGuardar.setOnClickListener(v -> {
+            String codigo = binding.etCodigo.getText().toString();
+            String descripcion = binding.etDescripcion.getText().toString();
+            String precio = binding.etPrecio.getText().toString();
+
+            // Pasamos los strings directo, el ViewModel se encarga de la lógica
+            viewModel.guardarProducto(codigo, descripcion, precio);
+        });
+
+        return root;
     }
 
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_cargar, container, false);
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null; // Evita fugas de memoria con el binding
     }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(CargarViewModel.class);
-        // TODO: Use the ViewModel
-    }
-
 }
