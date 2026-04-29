@@ -17,7 +17,6 @@
         android:orientation="vertical"
         android:padding="20dp">
 
-        <!-- La descripción del producto (Orden alfabético) -->
         <TextView
             android:id="@+id/tvItemDescripcion"
             android:layout_width="wrap_content"
@@ -26,7 +25,6 @@
             android:textStyle="bold"
             android:textColor="#000000" />
 
-        <!-- El código del producto -->
         <TextView
             android:id="@+id/tvItemCodigo"
             android:layout_width="wrap_content"
@@ -35,7 +33,6 @@
             android:textSize="16sp"
             android:textColor="#555555" />
 
-        <!-- El precio -->
         <TextView
             android:id="@+id/tvItemPrecio"
             android:layout_width="wrap_content"

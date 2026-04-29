@@ -21,10 +21,9 @@ public class ListarViewModel extends ViewModel {
     }
 
     public void cargarYOrdenarProductos() {
-        // Creamos una copia de la lista estática para no alterar la original
+
         List<Producto> productos = new ArrayList<>(MainActivity.listaProductos);
 
-        // Ordenamos la lista alfabéticamente por la descripción
         Collections.sort(productos, new Comparator<Producto>() {
             @Override
             public int compare(Producto p1, Producto p2) {
@@ -32,7 +31,6 @@ public class ListarViewModel extends ViewModel {
             }
         });
 
-        // Tiramos el resultado en el MutableLiveData para que la Vista se entere
         listaOrdenada.setValue(productos);
     }
 }

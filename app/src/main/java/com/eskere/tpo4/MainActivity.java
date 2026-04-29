@@ -33,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         setSupportActionBar(binding.appBarMain.toolbar);
 
-
         NavHostFragment navHostFragment = (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
         assert navHostFragment != null;
         NavController navController = navHostFragment.getNavController();
@@ -56,17 +55,14 @@ public class MainActivity extends AppCompatActivity {
             NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
             NavigationUI.setupWithNavController(bottomNavigationView, navController);
         }
-        // --- CÓDIGO PARA INTERCEPTAR EL BOTÓN SALIR ---
 
-        // Interceptamos el menú lateral
         if (navigationView != null) {
             navigationView.getMenu().findItem(R.id.nav_salir).setOnMenuItemClickListener(item -> {
                 mostrarDialogoSalir();
-                return true; // Devuelve true indicando que ya manejamos este clic
+                return true;
             });
         }
 
-        // Interceptamos el menú inferior 
         if (bottomNavigationView != null) {
             bottomNavigationView.getMenu().findItem(R.id.nav_salir).setOnMenuItemClickListener(item -> {
                 mostrarDialogoSalir();
@@ -78,12 +74,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         boolean result = super.onCreateOptionsMenu(menu);
-        // Using findViewById because NavigationView exists in different layout files
-        // between w600dp and w1240dp
+
         NavigationView navView = findViewById(R.id.nav_view);
         if (navView == null) {
-            // The navigation drawer already has the items including the items in the overflow menu
-            // We only inflate the overflow menu if the navigation drawer isn't visible
+
             getMenuInflater().inflate(R.menu.overflow, menu);
         }
         return result;
@@ -105,16 +99,15 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    // Método para mostrar el cuadro de diálogo de confirmación
     private void mostrarDialogoSalir() {
         new android.app.AlertDialog.Builder(this)
                 .setTitle("Cerrar aplicación")
                 .setMessage("¿Desea salir de la aplicación?")
                 .setPositiveButton("Sí", (dialog, which) -> {
-                    finishAffinity(); // Cierra todas las ventanas y termina la app
+                    finishAffinity();
                 })
                 .setNegativeButton("No", (dialog, which) -> {
-                    dialog.dismiss(); // Cierra el cuadro de diálogo y no hace nada
+                    dialog.dismiss();
                 })
                 .show();
     }

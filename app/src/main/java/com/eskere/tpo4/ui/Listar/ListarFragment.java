@@ -25,19 +25,18 @@ public class ListarFragment extends Fragment {
         binding = FragmentListarBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // 1. Configuramos el RecyclerView (LayoutManager vertical es obligatorio)
+
         binding.rvProductos.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        // 2. Observamos la lista que preparó el ViewModel
+
         viewModel.getListaOrdenada().observe(getViewLifecycleOwner(), listaProductos -> {
             if (listaProductos != null) {
-                // 3. Cuando llegan los datos ordenados, creamos el Adapter y lo unimos
+
                 adapter = new ProductoAdapter(listaProductos);
                 binding.rvProductos.setAdapter(adapter);
             }
         });
 
-        // 4. Le damos la orden al ViewModel para que empiece a trabajar
         viewModel.cargarYOrdenarProductos();
 
         return root;
@@ -46,6 +45,6 @@ public class ListarFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        binding = null; // Liberamos la memoria del ViewBinding
+        binding = null;
     }
 }
